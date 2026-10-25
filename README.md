@@ -1,35 +1,67 @@
-This is a Kotlin Multiplatform project targeting Android, iOS.
+# Bills
 
-* [/iosApp](./iosApp/iosApp) contains an iOS application. Even if you’re sharing your UI with Compose Multiplatform,
-  you need this entry point for your iOS app. This is also where you should add SwiftUI code for your project.
+Snap a receipt, let a vision model read it, fix it up, say who ate what, and get an exact
+per-person split plus a short recap to share. A second tab tracks your own monthly spending,
+including your share of every split.
 
-* [/sharedLogic](./sharedLogic/src) is for the code that will be shared between app targets in the project.
-  The most important subfolder is [commonMain](./sharedLogic/src/commonMain/kotlin). If preferred, you
-  can add code to the platform-specific folders here too.
+Built with Kotlin Multiplatform and Compose Multiplatform. Android is the only shipping target;
+the iOS app is still a placeholder.
 
-* [/sharedUI](./sharedUI/src) is for code that will be shared across your Compose Multiplatform applications.
-  It contains several subfolders:
-  - [commonMain](./sharedUI/src/commonMain/kotlin) is for code that’s common for all targets.
-  - Other folders are for Kotlin code that will be compiled for only the platform indicated in the folder name.
-    For example, if you want to use Apple’s CoreCrypto for the iOS part of your Kotlin app,
-    the [iosMain](./sharedUI/src/iosMain/kotlin) folder would be the right place for such calls.
-    Similarly, if you want to edit the Desktop (JVM) specific part, the [jvmMain](./sharedUI/src/jvmMain/kotlin)
-    folder is the appropriate location.
+## Features
 
-### Running the apps
+- **Receipt scanning**: camera or gallery photo, read by a vision model into items, tax, service
+  and discount. Everything is editable before you split it.
+- **Exact splits**: assign items to people (unassigned items are shared by everyone). Tax, service
+  and discount are allocated proportionally, and every share sums back to the receipt total down to
+  the rupiah. A receipt that doesn't add up is flagged instead of silently corrected.
+- **Shareable recap**: a short casual-Indonesian summary of who owes what, written by the model
+  from figures the app computed. A note that quotes any number the app didn't compute is dropped.
+- **Spending tracker (Pengeluaran)**: log expenses by hand or from a scan, see the month by
+  category, and get a short monthly note.
+- **Local-first**: splits and expenses are stored on the device with SQLite.
 
-Use the run configurations provided by the run widget in your IDE's toolbar. You can also use these commands and options:
+## How it works
 
-- Android app: `./gradlew :androidApp:assembleDebug`
-- iOS app: open the [/iosApp](./iosApp) directory in Xcode and run it from there.
+- The model only extracts data and writes prose. All arithmetic stays in plain Kotlin
+  (`SplitCalculator`, `SpendCalculator`), with money held as `Long` in minor units.
+- AI providers are OpenAI-compatible chat completions with strict JSON schemas, tried in order:
+  Gemini, then Groq, then NVIDIA NIM. Only provider-side failures (network, rate limit, 5xx)
+  fall through to the next one.
 
-### Running tests
+## Setup
 
-Use the run button in your IDE's editor gutter, or run tests using Gradle tasks:
+Requirements: Android Studio with JDK 21, an Android device or emulator on API 29+.
 
-- Android tests: `./gradlew :sharedUI:testAndroidHostTest :sharedLogic:testAndroidHostTest`
-- iOS tests: `./gradlew :sharedLogic:iosSimulatorArm64Test`
+Add at least one API key to `local.properties` (or as environment variables of the same name):
 
----
+```properties
+GEMINI_API_KEY=...
+GROQ_API_KEY=...
+NVIDIA_API_KEY=...
+```
 
-Learn more about [Kotlin Multiplatform](https://www.jetbrains.com/help/kotlin-multiplatform-dev/get-started.html)…
+Any one key is enough. Without keys the app still builds and manual entry works; scanning shows
+a missing-key error.
+
+## Build and test
+
+```bash
+./gradlew :androidApp:assembleDebug            # debug APK
+./gradlew :sharedLogic:testAndroidHostTest     # split, spend, AI mapping and storage tests
+./gradlew :sharedUI:testAndroidHostTest        # UI copy helpers
+./gradlew :sharedLogic:iosSimulatorArm64Test   # shared logic on Kotlin/Native
+```
+
+## Project structure
+
+| Module        | What lives there                                                              |
+|---------------|-------------------------------------------------------------------------------|
+| `androidApp`  | Android entry point: wires API keys, storage and camera into the shared app. |
+| `sharedUI`    | Compose UI: screens, view models, the Nota design system, CameraX capture.   |
+| `sharedLogic` | Models, split and spend math, AI scanning, SQLDelight storage.               |
+| `iosApp`      | SwiftUI template, not wired to the shared UI yet.                            |
+
+## Stack
+
+Kotlin 2.4, Compose Multiplatform 1.12, Ktor, kotlinx.serialization, SQLDelight, CameraX,
+AndroidX Navigation Event. Fonts: IBM Plex Sans and Plex Mono (OFL).

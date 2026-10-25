@@ -4,8 +4,8 @@ Bills — snap a receipt, let a vision model read it, fix it up, say who ate wha
 exact per-person split plus a short Indonesian recap to share.
 
 Kotlin Multiplatform + Compose Multiplatform. Android is the only shipping target today; the
-iOS app is still the KMP wizard template. `README.md` is that template's text — trust this file
-over it (it mentions `sharedUI` iOS/JVM source sets that don't exist).
+iOS app is still the KMP wizard template. `README.md` is the public overview; this file is the
+source of truth for how the code works.
 
 ## Modules
 
