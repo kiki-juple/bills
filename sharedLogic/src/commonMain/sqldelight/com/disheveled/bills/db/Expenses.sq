@@ -1,0 +1,46 @@
+-- The spending log, one row per Expense.
+-- date is ISO yyyy-MM-dd text, which sorts and range-filters correctly as plain text.
+-- category and suggested_category hold Category.key; source is 'split', 'scan' or 'manual'.
+-- Rows are marked deleted, never removed, so a later sync can tell a deletion apart from an
+-- entry this device never had.
+CREATE TABLE expenses (
+    id TEXT NOT NULL PRIMARY KEY,
+    title TEXT NOT NULL,
+    amount INTEGER NOT NULL,
+    currency TEXT NOT NULL,
+    category TEXT NOT NULL,
+    suggested_category TEXT,
+    date TEXT NOT NULL,
+    note TEXT,
+    source TEXT NOT NULL,
+    split_id TEXT,
+    created_at INTEGER NOT NULL,
+    updated_at INTEGER NOT NULL,
+    deleted_at INTEGER
+);
+
+CREATE INDEX expenses_date ON expenses(date);
+
+between:
+SELECT * FROM expenses
+WHERE deleted_at IS NULL AND date BETWEEN :fromDate AND :toDate
+ORDER BY date DESC, created_at DESC;
+
+anyLive:
+SELECT EXISTS(SELECT 1 FROM expenses WHERE deleted_at IS NULL);
+
+splitShares:
+SELECT * FROM expenses WHERE deleted_at IS NULL AND split_id IS NOT NULL;
+
+byId:
+SELECT * FROM expenses WHERE id = ? AND deleted_at IS NULL;
+
+-- Not ON CONFLICT DO UPDATE: that needs SQLite 3.24, and API 29 ships 3.22.
+upsert:
+INSERT OR REPLACE INTO expenses(
+    id, title, amount, currency, category, suggested_category, date, note, source, split_id,
+    created_at, updated_at, deleted_at
+) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+
+markDeleted:
+UPDATE expenses SET deleted_at = :at, updated_at = :at WHERE id = :id;

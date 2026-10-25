@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tinted by the system from its alpha channel only, so this is the slot and receipt silhouette
+     with the rows punched out (evenOdd); the paper starts below the lip so the two stay apart. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <group android:pivotX="54" android:pivotY="54" android:scaleX="0.92" android:scaleY="0.92" android:translateY="1.5">
+        <path
+            android:pathData="M32,34.5 a5.5,5.5 0 0 1 5.5,-5.5 H70.5 a5.5,5.5 0 0 1 5.5,5.5 a5.5,5.5 0 0 1 -5.5,5.5 H37.5 a5.5,5.5 0 0 1 -5.5,-5.5 Z"
+            android:fillColor="#FFFFFFFF" />
+        <path
+            android:pathData="M37,41.6 H71 V76 L67.6,79.2 L64.2,76 L60.8,79.2 L57.4,76 L54,79.2 L50.6,76 L47.2,79.2 L43.8,76 L40.4,79.2 L37,76 Z M42,45.8 H55 a1.2,1.2 0 0 1 0,2.4 H42 a1.2,1.2 0 0 1 0,-2.4 Z M61,45.8 H66 a1.2,1.2 0 0 1 0,2.4 H61 a1.2,1.2 0 0 1 0,-2.4 Z M42,51.8 H52 a1.2,1.2 0 0 1 0,2.4 H42 a1.2,1.2 0 0 1 0,-2.4 Z M62,51.8 H66 a1.2,1.2 0 0 1 0,2.4 H62 a1.2,1.2 0 0 1 0,-2.4 Z M41.6,62.5 H66.4 a1.6,1.6 0 0 1 1.6,1.6 V67.9 a1.6,1.6 0 0 1 -1.6,1.6 H41.6 a1.6,1.6 0 0 1 -1.6,-1.6 V64.1 a1.6,1.6 0 0 1 1.6,-1.6 Z M42.5,64.6 H49 a1.4,1.4 0 0 1 0,2.8 H42.5 a1.4,1.4 0 0 1 0,-2.8 Z M57,64.6 H65.5 a1.4,1.4 0 0 1 0,2.8 H57 a1.4,1.4 0 0 1 0,-2.8 Z"
+            android:fillColor="#FFFFFFFF"
+            android:fillType="evenOdd" />
+    </group>
+</vector>

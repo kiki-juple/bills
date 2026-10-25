@@ -1,0 +1,21 @@
+-- Saved splits, one row per SavedSplit. data is the JSON of its inputs (receipt, people,
+-- assignments, who the user was): they are always read together and never queried apart.
+-- date sits in its own column only so the history can be ordered without parsing.
+CREATE TABLE splits (
+    id TEXT NOT NULL PRIMARY KEY,
+    date TEXT NOT NULL,
+    data TEXT NOT NULL,
+    created_at INTEGER NOT NULL,
+    updated_at INTEGER NOT NULL,
+    deleted_at INTEGER
+);
+
+selectAll:
+SELECT * FROM splits WHERE deleted_at IS NULL ORDER BY date DESC, created_at DESC;
+
+byId:
+SELECT * FROM splits WHERE id = ? AND deleted_at IS NULL;
+
+upsert:
+INSERT OR REPLACE INTO splits(id, date, data, created_at, updated_at, deleted_at)
+VALUES (?, ?, ?, ?, ?, ?);

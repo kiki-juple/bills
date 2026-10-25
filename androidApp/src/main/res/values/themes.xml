@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--
+      The window background is painted before Compose draws, so it has to match the app's
+      own surface in each mode — otherwise launching in dark mode flashes white.
+    -->
+    <style name="Theme.Bills" parent="@android:style/Theme.DeviceDefault.Light.NoActionBar">
+        <item name="android:windowBackground">@color/bills_window_background</item>
+    </style>
+</resources>

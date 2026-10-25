@@ -1,0 +1,10 @@
+CREATE TABLE settings (
+    name TEXT NOT NULL PRIMARY KEY,
+    value TEXT NOT NULL
+);
+
+valueOf:
+SELECT value FROM settings WHERE name = ?;
+
+put:
+INSERT OR REPLACE INTO settings(name, value) VALUES (?, ?);
